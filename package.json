@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "aws serverless functions to ingest nhl game data into postgress",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matt-gohr/nhl-game-data-ingestion.git"
@@ -18,6 +15,18 @@
   },
   "homepage": "https://github.com/matt-gohr/nhl-game-data-ingestion#readme",
   "dependencies": {
+    "@types/aws-lambda": "^8.10.106",
+    "aws-lambda": "^1.0.7",
     "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "serverless-lift": "^1.20.2",
+    "serverless-offline": "^11.0.0",
+    "serverless-plugin-include-dependencies": "^5.0.0",
+    "serverless-plugin-scripts": "^1.0.2",
+    "serverless-plugin-typescript": "^2.1.2"
+  },
+  "scripts": {
+    "local:scheduler": "serverless invoke local -f game-scheduler"
   }
 }
