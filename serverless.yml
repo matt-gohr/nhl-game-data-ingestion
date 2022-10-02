@@ -26,10 +26,16 @@ provider:
   region: us-east-1
   stage: dev
   environment:
-    # This environment section is used for all functions in the config
-    # This is a commonly used access token for all lambda handling
     REGION: ${opt:region, self:provider.region}
     STAGE: ${opt:stage, self:provider.stage}
+    USERNAME: ${self:custom.common.USERNAME}
+    PASSWORD: ${self:custom.common.PASSWORD}
+    ENGINE: ${self:custom.common.ENGINE}
+    HOST: ${self:custom.common.HOST}
+    PORT: ${self:custom.common.PORT}
+    DBNAME: ${self:custom.common.DBNAME}
+    SCHEMA: ${self:custom.common.SCHEMA}
+    MAXCONNECTIONS: ${self:custom.common.MAXCONNECTIONS}
 
 functions:
   game-scheduler:
@@ -46,4 +52,4 @@ functions:
     handler: game-watcher/src/index.handler
     description: Triggers loads for all games
     events:
-      - sqs: arn:aws:sqs:region:${self:custom.common.AWS_ACCOUNT_ID}:record-game-data
+      - sqs: arn:aws:sqs:${opt:region, self:provider.region}:${self:custom.common.AWS_ACCOUNT_ID}:record-game-data
