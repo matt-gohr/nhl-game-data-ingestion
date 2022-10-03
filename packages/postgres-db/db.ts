@@ -2,26 +2,18 @@ import { Pool, PoolConfig } from 'pg';
 
 export class DB {
   private static _pool: Pool | null = null;
-  private static _readPool: Pool | null = null;
 
   public static async close(): Promise<void> {
-    const promises: Array<Promise<void>> = [];
+    console.log('closing');
+
     if (DB._pool) {
-      promises.push(
-        DB._pool.end().then(() => {
-          DB._pool = null;
-        })
-      );
+      await DB._pool.end().then(() => {
+        DB._pool = null;
+        console.log('closed');
+      });
     }
-    if (DB._readPool) {
-      promises.push(
-        DB._readPool.end().then(() => {
-          DB._readPool = null;
-        })
-      );
-    }
-    await Promise.all(promises);
-    return await Promise.resolve();
+
+    return;
   }
 
   public static async getPool(): Promise<Pool> {
