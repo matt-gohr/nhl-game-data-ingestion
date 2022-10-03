@@ -1,7 +1,7 @@
-import { ScheduledEvent, SNSEvent } from 'aws-lambda';
+import { SNSEvent } from 'aws-lambda';
 
 export class GameWatcher {
-  public handler(event: SNSEvent | ScheduledEvent): any {
+  public handler(event: SNSEvent): any {
     console.log('triggered function');
     console.log(event);
   }
