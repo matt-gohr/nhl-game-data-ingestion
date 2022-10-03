@@ -16,6 +16,8 @@ custom:
   watcherName: game-watcher
   apiName: game-api
   common: ${file(./secrets.yml)}
+  gameWatcherSnsTopicName: game-watch-topic
+  gameWatcherSns: arn:aws:sns:${opt:region, self:provider.region}:${self:custom.common.AWS_ACCOUNT_ID}:${self:custom.gameWatcherSnsTopicName}
 
 provider:
   name: aws
@@ -26,6 +28,7 @@ provider:
   region: us-east-1
   stage: dev
   environment:
+    GAME_WATCHER_SNS: ${self:custom.gameWatcherSns}
     REGION: ${opt:region, self:provider.region}
     STAGE: ${opt:stage, self:provider.stage}
     USERNAME: ${self:custom.common.USERNAME}
@@ -40,16 +43,16 @@ provider:
 functions:
   game-scheduler:
     name: game-scheduler
-    handler: game-scheduler/src/index.handler
+    handler: lambda-functions/game-scheduler/src/index.handler
     description: Triggers loads for all games
     events:
       - schedule:
-          rate: rate(12 hours)
+          rate: rate(30 minutes)
           name: every-12-hours
 
   game-watcher:
     name: game-watcher
-    handler: game-watcher/src/index.handler
+    handler: lambda-functions/game-watcher/src/index.handler
     description: Triggers loads for all games
     events:
-      - sqs: arn:aws:sqs:${opt:region, self:provider.region}:${self:custom.common.AWS_ACCOUNT_ID}:record-game-data
+      - sns: ${self:custom.gameWatcherSnsTopicName}
