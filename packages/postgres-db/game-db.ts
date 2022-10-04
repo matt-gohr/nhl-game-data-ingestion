@@ -24,20 +24,26 @@ export class GameDb {
   }
   public async getAllTodaysGamesByExternalIds(
     externalIds: number[]
-  ): Promise<any> {
-    if (!this.pool) {
-      this.pool = await DB.getPool();
-    }
-    const result = await this.pool.query<IGame>({
-      text:
+  ): Promise<Game[]> {
+    try {
+      if (!this.pool) {
+        this.pool = await DB.getPool();
+      }
+      const text =
         `SELECT ${this.schemaColumnStr} FROM game g ` +
         'LEFT JOIN team t on t."id"=g.team_id ' +
         'LEFT JOIN player p on p."id"=player_id ' +
         'WHERE g.game_identifier = ANY($1) ' +
         'and g.is_final is false ' +
-        'Date(g.start_date) = CURRENT_DATE',
-      values: [externalIds],
-    });
-    return result.rows.map((g) => new Game(g));
+        'and Date(g.start_date) = CURRENT_DATE';
+
+      const result = await this.pool.query<IGame>({
+        text,
+        values: [externalIds],
+      });
+      return result.rows.map((g) => new Game(g));
+    } catch {
+      return [];
+    }
   }
 }
