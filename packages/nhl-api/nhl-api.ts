@@ -3,14 +3,15 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ScheduledResponse } from '../models/api-responses/scheduled';
 
 export class NhlApi {
-  public async getNextDaysSchedule(): Promise<ScheduledResponse> {
+  public async getTodaysSchedule(): Promise<ScheduledResponse> {
     const url = 'https://statsapi.web.nhl.com/api/v1/schedule';
-    const date = new Date();
-
+    const startDate = new Date();
+    const endDate = new Date();
+    startDate.setDate(startDate.getDate() - 1);
     const config: AxiosRequestConfig = {
       params: {
-        startDate: date.toISOString().split('T')[0],
-        endDate: date.toISOString().split('T')[0],
+        startDate: startDate.toISOString().split('T')[0],
+        endDate: endDate.toISOString().split('T')[0],
       },
     };
     const r: AxiosResponse<ScheduledResponse> = await axios.get(url, config);
