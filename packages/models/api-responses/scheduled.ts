@@ -18,13 +18,7 @@ export interface ScheduledResponse {
           gameType: string;
           season: string;
           gameDate: string;
-          status: {
-            abstractGameState: string | 'Live';
-            codedGameState: string;
-            detailedState: string;
-            statusCode: string | 'Final' | 'Scheduled' | 'In Progress';
-            startTimeTBD: boolean;
-          };
+          status: GameStatus;
           teams: {
             away: {
               leagueRecord: {
@@ -68,4 +62,111 @@ export interface ScheduledResponse {
       matches: [];
     }
   ];
+}
+
+export interface PlayerResponse {
+  id: number;
+  fullName: string;
+  link: string;
+  firstName: string;
+  lastName: string;
+  primaryNumber: string;
+  birthDate: string;
+  currentAge: string;
+  birthCity: string;
+  birthStateProvince: string;
+  birthCountry: string;
+  nationality: string;
+  height: string;
+  weight: number;
+  active: boolean;
+  alternateCaptain: boolean;
+  captain: boolean;
+  rookie: boolean;
+  shootsCatches: string;
+  rosterStatus: string;
+  currentTeam: {
+    id: number;
+    name: string;
+    link: string;
+    triCode: string;
+  };
+  primaryPosition: {
+    code: string;
+    name: string;
+    type: string;
+    abbreviation: string;
+  };
+}
+export interface GameStatus {
+  abstractGameState: string | 'Live';
+  codedGameState: string;
+  detailedState: string;
+  statusCode: string | 'Final' | 'Scheduled' | 'In Progress';
+  startTimeTBD: boolean;
+}
+export interface TeamResponse {
+  id: number;
+  name: string;
+  link: string;
+  venue: {
+    name: string;
+    link: string;
+    city: string;
+    timeZone: {
+      id: string;
+      offset: number;
+      tz: string;
+    };
+  };
+  abbreviation: string;
+  triCode: string;
+  teamName: string;
+  locationName: string;
+  firstYearOfPlay: string;
+  division: {
+    id: number;
+    name: string;
+    nameShort: string;
+    link: string;
+    abbreviation: string;
+  };
+  conference: {
+    id: number;
+    name: string;
+    link: string;
+  };
+  franchise: {
+    franchiseId: number;
+    teamName: string;
+    link: string;
+  };
+  shortName: string;
+  officialSiteUrl: string;
+  franchiseId: number;
+  active: true;
+}
+export interface GameResponse {
+  gamePk: number;
+  link: string;
+  metaData: {
+    wait: number;
+    timeStamp: string;
+  };
+  gameData: {
+    game: {
+      pk: number;
+      season: string;
+      type: string;
+    };
+    datetime: {
+      dateTime: string;
+    };
+    status: GameStatus;
+    teams: {
+      away: TeamResponse;
+      home: TeamResponse;
+    };
+    players: { [name: string]: PlayerResponse };
+  };
 }
