@@ -19,10 +19,10 @@ export interface ScheduledResponse {
           season: string;
           gameDate: string;
           status: {
-            abstractGameState: string;
+            abstractGameState: string | 'Live';
             codedGameState: string;
             detailedState: string;
-            statusCode: string | 'Final' | 'Scheduled';
+            statusCode: string | 'Final' | 'Scheduled' | 'In Progress';
             startTimeTBD: boolean;
           };
           teams: {
