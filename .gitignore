@@ -4,3 +4,4 @@
 .build
 .serverless 
 secrets.yml
+coverage/
