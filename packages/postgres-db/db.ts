@@ -1,7 +1,7 @@
 import { Pool, PoolConfig } from 'pg';
 
 export class DB {
-  private static _pool: Pool | null = null;
+  public static _pool: Pool | null = null;
 
   public static async close(): Promise<void> {
     console.log('closing');
@@ -18,6 +18,8 @@ export class DB {
 
   public static async getPool(): Promise<Pool> {
     if (!DB._pool) {
+      console.log('connecting to pool');
+
       DB._pool = await DB.connectPool();
       return DB._pool;
     }

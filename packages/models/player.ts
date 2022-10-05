@@ -1,17 +1,17 @@
 export interface IPlayer {
   id?: number;
   name: string;
-  age: number;
-  position: string;
-  number: string;
+  age?: number;
+  position?: string;
+  number?: string;
   player_identifier: number;
 }
 export class Player {
   id?: number;
   name: string;
-  age: number;
-  position: string;
-  number: string;
+  age?: number;
+  position?: string;
+  number?: string;
   player_identifier: number;
   constructor(data: IPlayer) {
     this.id = data.id;

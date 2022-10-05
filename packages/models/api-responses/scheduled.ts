@@ -72,7 +72,7 @@ export interface PlayerResponse {
   lastName: string;
   primaryNumber: string;
   birthDate: string;
-  currentAge: string;
+  currentAge: number;
   birthCity: string;
   birthStateProvince: string;
   birthCountry: string;
@@ -168,5 +168,67 @@ export interface GameResponse {
       home: TeamResponse;
     };
     players: { [name: string]: PlayerResponse };
+  };
+  liveData: {
+    plays: {
+      allPlays: Play[];
+      scoringPlays: number[];
+      penaltyPlays: number[];
+      playsByPeriod: any;
+      currentPlay: any;
+    };
+  };
+}
+
+export interface Play {
+  players?: [
+    {
+      player: {
+        id: number;
+        fullName: string;
+        link: string;
+      };
+      playerType: string;
+    },
+    {
+      player: {
+        id: number;
+        fullName: string;
+        link: string;
+      };
+      playerType: string;
+    }
+  ];
+  result: {
+    event: string;
+    eventCode: string;
+    eventTypeId: string;
+    description: string;
+    penaltySeverity: string;
+    penaltyMinutes: number;
+  };
+  about?: {
+    eventIdx: number;
+    eventId: number;
+    period: number;
+    periodType: string;
+    ordinalNum: string;
+    periodTime: string;
+    periodTimeRemaining: string;
+    dateTime: string;
+    goals: {
+      away: number;
+      home: number;
+    };
+  };
+  coordinates?: {
+    x: number;
+    y: number;
+  };
+  team?: {
+    id: number;
+    name: string;
+    link: string;
+    triCode: string;
   };
 }

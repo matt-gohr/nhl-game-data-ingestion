@@ -18,37 +18,37 @@ export interface IGame {
 }
 export class Game {
   public id?: number;
-  public player_id: number;
-  public player_name: number;
-  public team_id: number;
-  public team_name: number;
-  public player_age: number;
-  public player_number: number;
-  public player_position: number;
+  public playerId: number;
+  public playerName: number;
+  public teamId: number;
+  public teamName: number;
+  public playerAge: number;
+  public playerNumber: number;
+  public playerPosition: number;
+  public penaltyMinutes: number;
+  public isFinal: boolean;
+  public gameIdentifier: number;
+  public startDate: Date;
   public assists: number;
   public goals: number;
   public hits: number;
   public points: number;
-  public penalty_minutes: number;
-  public is_final: boolean;
-  public game_identifier: number;
-  public start_date: Date;
   constructor(data: IGame) {
     this.id = data.id;
-    this.player_id = data.player_id;
-    this.player_name = data.player_name;
-    this.team_id = data.team_id;
-    this.team_name = data.team_name;
-    this.player_age = data.player_age;
-    this.player_number = data.player_number;
-    this.player_position = data.player_position;
+    this.playerId = data.player_id;
+    this.playerName = data.player_name;
+    this.teamId = data.team_id;
+    this.teamName = data.team_name;
+    this.playerAge = data.player_age;
+    this.playerNumber = data.player_number;
+    this.playerPosition = data.player_position;
+    this.penaltyMinutes = data.penalty_minutes;
+    this.isFinal = data.is_final;
+    this.gameIdentifier = data.game_identifier;
+    this.startDate = new Date(data.start_date);
     this.assists = data.assists;
     this.goals = data.goals;
     this.hits = data.hits;
     this.points = data.points;
-    this.penalty_minutes = data.penalty_minutes;
-    this.is_final = data.is_final;
-    this.game_identifier = data.game_identifier;
-    this.start_date = new Date(data.start_date);
   }
 }

@@ -5,7 +5,9 @@ import { DB } from './db';
 
 export class TeamDb {
   private pool: Pool;
-
+  constructor() {
+    this.pool = DB._pool;
+  }
   /**
    * getGameData
    */
@@ -15,7 +17,7 @@ export class TeamDb {
     }
     const result = await this.pool.query<ITeam>({
       text:
-        `INSERT INTO team ("name", team_identifier) VALUES ('test', 22) ` +
+        `INSERT INTO team ("name", team_identifier) VALUES ($1, $2) ` +
         `ON conflict ON CONSTRAINT unique_team_external_id DO UPDATE SET name=$1 RETURNING * `,
       values: [team.name, team.team_identifier],
     });

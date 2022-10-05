@@ -9,8 +9,7 @@ import { BaseFunction } from '../../lambda-base';
 
 export class GameScheduler extends BaseFunction {
   public async handler(): Promise<any> {
-    const api = new NhlApi();
-    const responses = await api.getTodaysSchedule();
+    const responses = await NhlApi.getTodaysSchedule();
     if (responses.totalGames > 0) {
       // find all games that haven't started or are finished
       const allGames = responses.dates[0]?.games.map((g) => g);
@@ -27,14 +26,14 @@ export class GameScheduler extends BaseFunction {
 
         if (gameDate < curTime) {
           const found = activeGamesDb.find(
-            (g) => g.game_identifier === game.gamePk
+            (g) => g.gameIdentifier === game.gamePk
           );
 
           const event: GameWatcherSNSEvent = {
             gameUrl: game.link,
           };
           if (found) {
-            if (found.is_final) {
+            if (found.isFinal) {
               return false; // if final score recorded skip
             }
             event.gameId = found.id;
