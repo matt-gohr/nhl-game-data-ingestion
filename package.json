@@ -22,6 +22,7 @@
     "axios": "^0.27.2",
     "jest-create-mock-instance": "^2.0.0",
     "pg": "^8.8.0",
+    "pg-format": "^1.0.4",
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
   },
@@ -38,7 +39,7 @@
   },
   "scripts": {
     "local:scheduler": "SLS_DEBUG=* serverless invoke local -f game-scheduler -s local",
-    "local:watcher": "SLS_DEBUG=* serverless invoke local -f game-watcher -s local -p ./lambda-functions/game-watcher/game-watcher-sns-event.json",
+    "local:watcher": "SLS_DEBUG=* serverless invoke local -f game-watcher -s local -p ./lambda-functions/game-watcher/event.json",
     "test:watcher": "jest game-watcher --config=./jest.config.js --coverage --watch",
     "test:scheduler": "echo 'not right'"
   }

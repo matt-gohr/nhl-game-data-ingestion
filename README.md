@@ -5,6 +5,8 @@ aws serverless functions to ingest nhl game data into postgress
 
 ## Installation
 
+using node version 16.x
+
 Install my-project with npm
 
 ```bash

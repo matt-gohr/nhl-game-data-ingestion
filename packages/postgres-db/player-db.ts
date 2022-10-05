@@ -25,7 +25,7 @@ export class PlayerDb {
         player.age,
         player.position,
         player.number,
-        player.player_identifier,
+        player.playerIdentifier,
       ],
     });
     return result.rows.map((g) => new Player(g))[0];
