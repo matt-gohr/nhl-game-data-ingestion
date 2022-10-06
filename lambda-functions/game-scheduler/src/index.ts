@@ -1,4 +1,4 @@
-import { SNSEvent } from 'aws-lambda';
+
 
 import { AwsUtil } from '../../../packages/aws/aws-util';
 import { GameWatcherSNSEvent } from '../../../packages/models/interfaces';
@@ -23,6 +23,7 @@ export class GameScheduler extends BaseFunction {
       allGames.forEach((game) => {
         const gameDate = new Date(game.gameDate);
         const curTime = new Date();
+        console.log('in all games', game);
 
         if (gameDate < curTime) {
           const found = activeGamesDb.find(
@@ -55,7 +56,7 @@ export class GameScheduler extends BaseFunction {
 
 export const instance = new GameScheduler();
 /* istanbul ignore next */
-export const handler = async (event: SNSEvent): Promise<any> => {
+export const handler = async (): Promise<any> => {
   await instance.handler().catch((err) => {
     //todo: add to some logging service for error handling
     console.error('there was an error');

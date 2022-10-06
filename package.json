@@ -41,6 +41,7 @@
     "local:scheduler": "SLS_DEBUG=* serverless invoke local -f game-scheduler -s local",
     "local:watcher": "SLS_DEBUG=* serverless invoke local -f game-watcher -s local -p ./lambda-functions/game-watcher/event.json",
     "test:watcher": "jest game-watcher --config=./jest.config.js --coverage --watch",
-    "test:scheduler": "echo 'not right'"
+    "test:scheduler": "jest game-scheduler --config=./jest.config.js --coverage --watch",
+    "test": "jest --config=./jest.config.js --coverage --watch'"
   }
 }
