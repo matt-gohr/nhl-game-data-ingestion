@@ -1,5 +1,3 @@
-
-
 import { AwsUtil } from '../../../packages/aws/aws-util';
 import { GameWatcherSNSEvent } from '../../../packages/models/interfaces';
 import { NhlApi } from '../../../packages/nhl-api/nhl-api';
@@ -23,8 +21,6 @@ export class GameScheduler extends BaseFunction {
       allGames.forEach((game) => {
         const gameDate = new Date(game.gameDate);
         const curTime = new Date();
-        console.log('in all games', game);
-
         if (gameDate < curTime) {
           const found = activeGamesDb.find(
             (g) => g.gameIdentifier === game.gamePk

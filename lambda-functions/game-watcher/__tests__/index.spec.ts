@@ -361,7 +361,6 @@ describe('game watcher', () => {
     };
 
     insertOrUpdatePlayerMock = jest.fn((player: IPlayer) => {
-      console.log(player);
       player.id = Math.random();
       return Promise.resolve(player);
     });

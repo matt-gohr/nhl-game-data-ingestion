@@ -4,22 +4,16 @@ export class DB {
   public static _pool: Pool | null = null;
 
   public static async close(): Promise<void> {
-    console.log('closing');
-
     if (DB._pool) {
       await DB._pool.end().then(() => {
         DB._pool = null;
-        console.log('closed');
       });
     }
-
     return;
   }
 
   public static async getPool(): Promise<Pool> {
     if (!DB._pool) {
-      console.log('connecting to pool');
-
       DB._pool = await DB.connectPool();
       return DB._pool;
     }
