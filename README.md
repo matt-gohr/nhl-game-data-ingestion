@@ -1,6 +1,8 @@
 # nhl-game-data-ingestion
 
-aws serverless functions to ingest nhl game data into postgress
+aws serverless functions to ingest nhl game data into postgress.
+The scheduler will run every 30 mins and check for game statuses.  If there is a live or past game that isn't already in the db, it will send an sns message to the `game-watcher` function to save the score. 
+
 ![image](https://user-images.githubusercontent.com/23470818/193689370-76d6ea5e-443a-4b95-ae79-4750c798c79e.png)
 
 ## Installation
