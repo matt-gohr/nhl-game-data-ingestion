@@ -39,9 +39,9 @@ To run tests, run the following command
   npm run test
 ```
 
-## Deploy
+## Deploy to AWS
 
-using serverless to deploy to aws. you'll have to configure the database and topics based on your environment.
+using serverless to deploy to aws. You'll have to configure the database.  I was able to get the lamnda functions deployed to my aws account but did not setup a database in aws. 
 
 ```bash
   serverless deploy
