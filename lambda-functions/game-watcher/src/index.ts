@@ -26,25 +26,19 @@ export class GameWatcher extends BaseFunction {
         await DB.getPool();
         const playerDb = new PlayerDb();
         const teamDb = new TeamDb();
-        console.log('here');
 
         const players = this.mapPlayers(
           Object.values(gameData.gameData.players)
         );
-        console.log('here');
 
         const teams = this.mapTeams([
           gameData.gameData.teams.away,
           gameData.gameData.teams.home,
         ]);
-        console.log('here');
+
         teamsDb = await Promise.all(
           teams.map((t) => teamDb.insertOrUpdateTeam(t))
         );
-
-        console.log('here');
-        console.log(players.find((p) => p.playerIdentifier === 8483560));
-
         playersDb = await Promise.all(
           players.map((p) => playerDb.insertOrUpdatePlayer(p))
         );
@@ -58,16 +52,11 @@ export class GameWatcher extends BaseFunction {
         teamMap.set(t.team_identifier, t.id);
       });
 
-      console.log(playersDb.length);
-
       playersDb.forEach((p) => {
-        if (p.playerIdentifier === 8483560) console.log(p);
-
         const teamId = teamMap.get(p.teamIdentifier);
         p.teamId = teamId;
         playerMap.set(p.playerIdentifier, p);
       });
-      console.log('about to get stats', playerMap.get(8480292));
 
       const gameStats = this.getPlayerStats(
         gameData.liveData.plays.allPlays,
@@ -76,7 +65,6 @@ export class GameWatcher extends BaseFunction {
         gameData.gamePk,
         playerMap
       );
-      console.log(gameStats);
 
       const newGames: Game[] = [];
       await Promise.all(
@@ -106,8 +94,6 @@ export class GameWatcher extends BaseFunction {
       if (play.result?.event === 'Goal') {
         play.players?.forEach((player) => {
           if (player.playerType === 'Scorer') {
-            // console.log('player.player.id', play);
-
             const curPlayer = playerMap.get(player.player.id);
             this.addOrPush(
               gameScores,
@@ -122,7 +108,6 @@ export class GameWatcher extends BaseFunction {
             );
           }
           if (player.playerType === 'Assist') {
-            // console.log('player.player.id', play);
             const curPlayer = playerMap.get(player.player?.id);
             this.addOrPush(
               gameScores,
@@ -139,7 +124,6 @@ export class GameWatcher extends BaseFunction {
         });
       } else if (play.result?.event === 'Hit') {
         play.players?.forEach((player) => {
-          // console.log('player.player.id', play);
           const curPlayer = playerMap.get(player.player.id);
           if (player.playerType === 'Hitter') {
             this.addOrPush(
@@ -158,7 +142,6 @@ export class GameWatcher extends BaseFunction {
       } else if (play.result?.event === 'Penalty') {
         play.players?.forEach((player) => {
           if (player.playerType === 'DrewBy') {
-            // console.log('player.player.id', play);
             const curPlayer = playerMap.get(player.player.id);
             this.addOrPush(
               gameScores,

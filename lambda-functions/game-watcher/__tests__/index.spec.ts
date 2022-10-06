@@ -17,7 +17,6 @@ jest.mock('../../../packages/postgres-db/team-db');
 jest.mock('../../../packages/nhl-api/nhl-api');
 describe('game watcher', () => {
   let event: SNSEvent;
-  let handler: GameWatcher;
 
   let insertOrUpdatePlayerMock: jest.Mock;
   let insertOrUpdateTeamMock: jest.Mock;
@@ -107,6 +106,7 @@ describe('game watcher', () => {
             name: 'Philadelphia Flyers',
             link: '/api/v1/teams/4',
             venue: {
+              //@ts-ignore
               id: 5096,
               name: 'Wells Fargo Center',
               link: '/api/v1/venues/5096',
@@ -391,19 +391,21 @@ describe('game watcher', () => {
         insertOrUpdateTeam: insertOrUpdateTeamMock,
       };
     });
-    handler = new GameWatcher();
   });
   it('On new create player should be called', async () => {
-    await handler.handler(event);
+    await handler(event);
     expect(insertOrUpdatePlayerMock).toHaveBeenCalled();
   });
   it('On new create team should be called', async () => {
-    await handler.handler(event);
+    await handler(event);
     expect(insertOrUpdateTeamMock).toHaveBeenCalled();
   });
   it('should tallie up scores for player', async () => {
-    const spy = jest.spyOn(handler, 'getPlayerStats');
-    await handler.handler(event);
+    const lambdaHandler = new GameWatcher();
+    //@ts-ignore
+    const spy = jest.spyOn(lambdaHandler, 'getPlayerStats');
+
+    await lambdaHandler.handler(event);
     expect(spy).toHaveReturnedWith([
       {
         penaltyMinutes: 2,
@@ -432,7 +434,7 @@ describe('game watcher', () => {
     ]);
   });
   it('should only insert ', async () => {
-    await handler.handler(event);
+    await handler(event);
     expect(updateGame).not.toHaveBeenCalled();
     expect(insertGame).toHaveBeenCalledWith(
       expect.arrayContaining([
