@@ -23,6 +23,9 @@ describe('game watcher', () => {
   let closeMock: jest.Mock;
   let getGameDataMock: jest.Mock;
   let getPoolMock: jest.Mock;
+  let getAllByExternalId: jest.Mock;
+  let getAllPlayerByExternalId: jest.Mock;
+  let getAllGameByExternalId: jest.Mock;
   let insertGame: jest.Mock;
   let updateGame: jest.Mock;
   let gameData: GameResponse;
@@ -366,12 +369,45 @@ describe('game watcher', () => {
       team.id = Math.random();
       return Promise.resolve(team);
     });
+
+    const watcher = new GameWatcher();
+
+    getAllByExternalId = jest.fn(() => {
+      return Promise.resolve(
+        watcher.mapTeams([
+          gameData.gameData.teams.away,
+          gameData.gameData.teams.home,
+        ])
+      );
+    });
+    getAllPlayerByExternalId = jest.fn(() => {
+      return Promise.resolve(
+        watcher.mapPlayers(Object.values(gameData.gameData.players))
+      );
+    });
+    getAllGameByExternalId = jest.fn().mockResolvedValue([
+      {
+        id: Math.random(),
+        penaltyMinutes: 2,
+        assists: 0,
+        goals: 2,
+        hits: 2,
+        points: 0,
+        playerId: 0.562383802251103,
+        teamId: 0.26357762280597674,
+        isFinal: true,
+        gameIdentifier: 123,
+        startDate: '2022-10-02T23:00:00.000Z',
+      },
+    ]);
+
     closeMock = jest.fn();
     getPoolMock = jest.fn();
 
     getGameDataMock = jest.fn().mockResolvedValue(gameData);
     insertGame = jest.fn().mockResolvedValue(true);
     updateGame = jest.fn().mockResolvedValue(true);
+
     DB.close = closeMock;
     DB.getPool = getPoolMock;
     NhlApi.getGameData = getGameDataMock;
@@ -379,15 +415,18 @@ describe('game watcher', () => {
       return {
         insertGames: insertGame,
         updateGame: updateGame,
+        getAllByExternalId: getAllGameByExternalId,
       };
     });
     (PlayerDb as jest.Mock).mockImplementation(() => {
       return {
         insertOrUpdatePlayer: insertOrUpdatePlayerMock,
+        getAllByExternalId: getAllPlayerByExternalId,
       };
     });
     (TeamDb as jest.Mock).mockImplementation(() => {
       return {
+        getAllByExternalId: getAllByExternalId,
         insertOrUpdateTeam: insertOrUpdateTeamMock,
       };
     });
@@ -452,5 +491,22 @@ describe('game watcher', () => {
         },
       ])
     );
+  });
+  it('should get existing data if live game', async () => {
+    event = {
+      Records: [
+        {
+          Sns: {
+            Message:
+              '{"gameUrl":"/api/v1/game/2022010069/feed/live", "gameId": 2}',
+          },
+        },
+      ],
+    } as unknown as SNSEvent;
+    await handler(event);
+    expect(getAllByExternalId).toHaveBeenCalled();
+    expect(getAllPlayerByExternalId).toHaveBeenCalled();
+    expect(getAllGameByExternalId).toHaveBeenCalled();
+    expect(updateGame).toHaveBeenCalled();
   });
 });

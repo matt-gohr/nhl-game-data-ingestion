@@ -98,4 +98,24 @@ export class GameDb {
       return [];
     }
   }
+  public async getAllByExternalId(externalId: number): Promise<Game[]> {
+    try {
+      if (!this.pool) {
+        this.pool = await DB.getPool();
+      }
+      const text =
+        `SELECT ${this.schemaColumnStr} FROM game g ` +
+        'LEFT JOIN team t on t."id"=g.team_id ' +
+        'LEFT JOIN player p on p."id"=player_id ' +
+        'WHERE g.game_identifier = $1';
+
+      const result = await this.pool.query<IGame>({
+        text,
+        values: [externalId],
+      });
+      return result.rows.map((g) => new Game(g));
+    } catch {
+      return [];
+    }
+  }
 }

@@ -13,7 +13,6 @@ export class PlayerDb {
    */
   public async insertOrUpdatePlayer(player: Player): Promise<Player> {
     if (!this.pool) {
-      console.log('getting pool');
       this.pool = await DB.getPool();
     }
     const result = await this.pool.query<IPlayer>({
@@ -29,5 +28,15 @@ export class PlayerDb {
       ],
     });
     return result.rows.map((g) => new Player(g))[0];
+  }
+  public async getAllByExternalId(externalIds: number[]): Promise<Player[]> {
+    if (!this.pool) {
+      this.pool = await DB.getPool();
+    }
+    const result = await this.pool.query<IPlayer>({
+      text: `SELECT * from team where player_identifier = ANY($1)`,
+      values: [externalIds],
+    });
+    return result.rows.map((g) => new Player(g));
   }
 }

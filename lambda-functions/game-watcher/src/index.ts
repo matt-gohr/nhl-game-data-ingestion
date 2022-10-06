@@ -16,43 +16,47 @@ import { BaseFunction } from '../../lambda-base';
 
 export class GameWatcher extends BaseFunction {
   public async handler(event: SNSEvent): Promise<any> {
-    const gameDb = new GameDb();
     const data: GameWatcherSNSEvent = JSON.parse(event.Records[0]?.Sns.Message);
     const gameData = await NhlApi.getGameData(data.gameUrl);
+
     if (gameData) {
-      let playersDb: Player[];
-      let teamsDb: Team[];
+      let players = this.mapPlayers(Object.values(gameData.gameData.players));
+      let teams = this.mapTeams([
+        gameData.gameData.teams.away,
+        gameData.gameData.teams.home,
+      ]);
+      let existingGamesInDb: Game[];
+
+      const playerDb = new PlayerDb();
+      const teamDb = new TeamDb();
+      const gameDb = new GameDb();
+      await DB.getPool();
+
       if (data.gameId === undefined) {
-        await DB.getPool();
-        const playerDb = new PlayerDb();
-        const teamDb = new TeamDb();
-
-        const players = this.mapPlayers(
-          Object.values(gameData.gameData.players)
-        );
-
-        const teams = this.mapTeams([
-          gameData.gameData.teams.away,
-          gameData.gameData.teams.home,
-        ]);
-
-        teamsDb = await Promise.all(
+        teams = await Promise.all(
           teams.map((t) => teamDb.insertOrUpdateTeam(t))
         );
-        playersDb = await Promise.all(
+        players = await Promise.all(
           players.map((p) => playerDb.insertOrUpdatePlayer(p))
         );
       } else {
-        //another query to get all players by ids
-        //another query to get all teams by ids
+        teams = await teamDb.getAllByExternalId(
+          teams.map((t) => t.team_identifier)
+        );
+
+        players = await playerDb.getAllByExternalId(
+          players.map((p) => p.playerIdentifier)
+        );
+
+        existingGamesInDb = await gameDb.getAllByExternalId(gameData.gamePk);
       }
       const playerMap = new Map<number, Player>();
       const teamMap = new Map<number, number>();
-      teamsDb.forEach((t) => {
+      teams.forEach((t) => {
         teamMap.set(t.team_identifier, t.id);
       });
 
-      playersDb.forEach((p) => {
+      players.forEach((p) => {
         const teamId = teamMap.get(p.teamIdentifier);
         p.teamId = teamId;
         playerMap.set(p.playerIdentifier, p);
@@ -63,9 +67,9 @@ export class GameWatcher extends BaseFunction {
         gameData.gameData.status.detailedState === 'Final',
         gameData.gameData.datetime.dateTime,
         gameData.gamePk,
-        playerMap
+        playerMap,
+        existingGamesInDb
       );
-
       const newGames: Game[] = [];
       await Promise.all(
         gameStats.map((g) => {
@@ -186,9 +190,6 @@ export class GameWatcher extends BaseFunction {
         team_identifier: p.currentTeam?.id,
       });
     });
-
-    // console.log(players.filter((p) => p.playerIdentifier === undefined));
-
     return players;
   }
   private mapTeams(teams: TeamResponse[]): Team[] {
