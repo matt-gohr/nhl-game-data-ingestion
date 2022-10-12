@@ -2,7 +2,7 @@
   "Records": [
     {
       "Sns": {
-        "Message": "{\"gameUrl\":\"/api/v1/game/2022010069/feed/live\"}"
+        "Message": "{\"gameUrl\":\"/api/v1/game/2022020003/feed/live\"}"
       }
     }
   ]

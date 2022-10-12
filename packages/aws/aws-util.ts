@@ -9,7 +9,7 @@ export class AwsUtil {
   private static async sendSns(message: string, topic: string): Promise<any> {
     if (process.env['STAGE'] === 'local') {
       console.log('========START SNS MESSAGE=======');
-      console.log(message);
+      console.log(JSON.stringify(message));
       console.log('========END SNS MESSAGE=========\n');
     } else {
       const sns = new AWS.SNS({

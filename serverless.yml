@@ -24,7 +24,7 @@ provider:
   runtime: nodejs16.x
   memorySize: 256
   timeout: 60
-  profile: serverless-admin2
+  profile: lambda-readonly
   region: us-east-1
   stage: dev
   environment:

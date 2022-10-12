@@ -1,7 +1,9 @@
 import { SNSEvent } from 'aws-lambda';
 
 import {
-    Play, PlayerResponse, TeamResponse
+  Play,
+  PlayerResponse,
+  TeamResponse,
 } from '../../../packages/models/api-responses/scheduled';
 import { Game } from '../../../packages/models/game';
 import { GameWatcherSNSEvent } from '../../../packages/models/interfaces';
@@ -16,6 +18,8 @@ import { BaseFunction } from '../../lambda-base';
 
 export class GameWatcher extends BaseFunction {
   public async handler(event: SNSEvent): Promise<any> {
+    console.log('starting lambda function');
+
     const data: GameWatcherSNSEvent = JSON.parse(event.Records[0]?.Sns.Message);
     const gameData = await NhlApi.getGameData(data.gameUrl);
 
