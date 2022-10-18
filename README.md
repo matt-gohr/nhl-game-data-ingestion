@@ -94,6 +94,26 @@ once the event.json file is updated, please run the following command.
   npm run local:watcher
 ```
 
+## Run api
+
+```bash
+  npm run local:api
+```
+
+two endpoints.
+
+Get all game data:
+
+```
+http://localhost:3000/local/allGameData
+```
+
+Get all game data by external id:
+
+```
+http://localhost:3000/local/allGameData/2022010069
+```
+
 ## Running Tests
 
 To run tests, run the following command

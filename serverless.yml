@@ -48,7 +48,12 @@ functions:
     events:
       - schedule:
           rate: rate(30 minutes)
-          name: every-12-hours
+          name: every-30-mins
+  api:
+    handler: lambda-functions/api/src/index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
 
   game-watcher:
     name: game-watcher
