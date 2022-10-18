@@ -46,7 +46,7 @@ psql -U postgres -h 0.0.0.0 -p 5431 sport_radar < new-dump-file.sql
 There will be a password prompt for user `postgres` enter in 9876 as the password
 
 Create Secrets file
-There is a `secrets.example.yml` file.  You would need to remove the example in the name to make it `secrets.yml` and that will be the env variables for the database and AWS account
+There is a `secrets.example.yml` file. You would need to remove the example in the name to make it `secrets.yml` and that will be the env variables for the database and AWS account
 
 ## AWS Config
 
@@ -97,7 +97,7 @@ once the event.json file is updated, please run the following command.
   npm run local:watcher
 ```
 
-## Run api
+# Run api
 
 ```bash
   npm run local:api
@@ -117,7 +117,7 @@ Get all game data by external id:
 http://localhost:3000/local/allGameData/2022010069
 ```
 
-## Running Tests
+# Running Tests
 
 To run tests, run the following command
 
@@ -125,7 +125,7 @@ To run tests, run the following command
   npm run test
 ```
 
-## Deploy to AWS
+# Deploy to AWS
 
 using serverless to deploy to aws. You'll have to configure the database. I was able to get the lamnda functions deployed to my aws account but did not setup a database in aws.
 
