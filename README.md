@@ -15,7 +15,17 @@ Install my-project with npm
   npm i
 ```
 
-Run dump file For Postgres
+
+```bash
+  brew install postgressql
+```
+
+
+Run dump file For Postgres password for postgres user is 9876
+```bash
+    psql -U postgres -h 0.0.0.0 -p 5431 sport_radar < new-dump-file.sql
+```
+
 
 Please setup a profile with the provided credentials.  This is a readonly profile for my account that I'll delete afterwards.
 ![image](https://user-images.githubusercontent.com/23470818/195419340-3104f8b4-e992-445b-a9d8-c7dad1e19c39.png)
