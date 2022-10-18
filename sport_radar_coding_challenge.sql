@@ -19,6 +19,7 @@
 -- ----------------------------
 -- Sequence structure for game_id_seq
 -- ----------------------------
+CREATE SCHEMA IF NOT EXISTS coding_challenge AUTHORIZATION postgres;
 DROP SEQUENCE IF EXISTS "coding_challenge"."game_id_seq";
 CREATE SEQUENCE "coding_challenge"."game_id_seq" 
 INCREMENT 1
@@ -38,7 +39,7 @@ MINVALUE  1
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
-ALTER SEQUENCE "coding_challenge"."player_id_seq" OWNER TO "eletype";
+ALTER SEQUENCE "coding_challenge"."player_id_seq" OWNER TO "postgres";
 
 -- ----------------------------
 -- Sequence structure for team_id_seq
@@ -50,7 +51,7 @@ MINVALUE  1
 MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
-ALTER SEQUENCE "coding_challenge"."team_id_seq" OWNER TO "eletype";
+ALTER SEQUENCE "coding_challenge"."team_id_seq" OWNER TO "postgres";
 
 -- ----------------------------
 -- Table structure for game
@@ -146,7 +147,7 @@ CREATE TABLE "coding_challenge"."player" (
   "team_id" int4
 )
 ;
-ALTER TABLE "coding_challenge"."player" OWNER TO "eletype";
+ALTER TABLE "coding_challenge"."player" OWNER TO "postgres";
 
 -- ----------------------------
 -- Records of player
@@ -308,7 +309,7 @@ CREATE TABLE "coding_challenge"."team" (
   "team_identifier" int4 NOT NULL
 )
 ;
-ALTER TABLE "coding_challenge"."team" OWNER TO "eletype";
+ALTER TABLE "coding_challenge"."team" OWNER TO "postgres";
 
 -- ----------------------------
 -- Records of team
