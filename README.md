@@ -45,6 +45,9 @@ psql -U postgres -h 0.0.0.0 -p 5431 sport_radar < new-dump-file.sql
 
 There will be a password prompt for user `postgres` enter in 9876 as the password
 
+Create Secrets file
+There is a `secrets.example.yml` file.  You would need to remove the example in the name to make it `secrets.yml` and that will be the env variables for the database and AWS account
+
 ## AWS Config
 
 Please setup a profile with the provided credentials in the email. This is a readonly profile for my account that I'll delete afterwards.
